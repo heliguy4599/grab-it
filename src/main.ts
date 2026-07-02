@@ -8,7 +8,7 @@ program
 .name(denoJson.name)
 .version(denoJson.version)
 .description(denoJson.description)
-.argument("[pattern...]", "Glob patterns to match")
+.argument("[pattern...]", "Glob patterns to match.")
 .option("-x, --exclude <paths...>", "Exclude directories or path segments", [])
 .option("-H, --hidden", "Include hidden files and directories", false)
 .option("-d, --dirs", "Also match directories", false)
@@ -31,11 +31,10 @@ type Opts = {
 	depth?: number,
 }
 
-const patterns: string[] = program.args
-
-if (patterns.length === 0) {
-	console.error("grab: no patterns given. Run `grab --help` for usage.")
-	Deno.exit(1)
+const patterns: string[] = program.processedArgs[0]
+if (patterns.length < 1) {
+	// Default to match the current dir here instead of the .argument to avoid an unclear "--help" entry.
+	patterns.push("*")
 }
 
 const opts: Opts = program.opts()
